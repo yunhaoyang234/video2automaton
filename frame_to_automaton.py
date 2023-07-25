@@ -1,5 +1,23 @@
 from video_to_frame import *
 from automaton_state import *
+import argparse
+import pprint
+import json
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--propositions_seperate_by_comma', type=str, default='human,car')
+parser.add_argument('--box_threshold', type=float, default=0.4)
+parser.add_argument('--scale', type=int, default=1)
+parser.add_argument('--second_per_frame', type=str, default=1)
+parser.add_argument('--video_path', type=str, default='')
+
+def main(args):
+    props = args.propositions_seperate_by_comma.split(',')
+    BOX_TRESHOLD = args.box_threshold
+    scale=args.scale
+    second_per_frame=args.second_per_frame
+    states, transitions, accept_states = frame2automaton(args.video_path, props, scale, second_per_frame)
+    print(states, transitions, accept_states)
 
 def get_prop_traj(prop, video, annot=True):
     classes = [prop]
@@ -44,14 +62,3 @@ def frame2automaton(video_path, props, scale=2, second_per_frame=2):
     probabilities = get_probabilities(props, video)
     states, transitions, accept_states = build_automaton(props, num_frames, probabilities)
     return states, transitions, accept_states
-
-scale=1
-second_per_frame=2
-props = ['head']
-
-# change the path to your own file directory
-frame2automaton(cwd + 'data/harvard.mp4', props, scale, second_per_frame)
-
-frame2automaton(cwd + 'data/stanford.mp4', props, scale, second_per_frame)
-
-frame2automaton(cwd + 'data/mit.mp4', props, scale, second_per_frame)

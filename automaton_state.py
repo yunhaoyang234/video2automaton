@@ -34,3 +34,46 @@ class State:
             else:
                 probability *= 1 - probabilities[i][self.frame_num]
         self.prob = round(probability,2)
+
+def create_labels(num_props):
+    label_list = []
+    def add_labels(num_props, label, label_list):
+        if len(label) == num_props:
+            label_list.append(label)
+            return
+        add_labels(num_props, label + 'T', label_list)
+        add_labels(num_props, label + 'F', label_list)
+
+    add_labels(num_props, '', label_list)
+    return label_list
+
+def build_automaton(props, num_frames, probabilities):
+    states = []
+    labels = create_labels(len(props))
+
+    init_state = State(0, -1, 'initial', props)
+    states.append(init_state)
+    idx = 1
+    for f in range(num_frames):
+        for lab in labels:
+            state = State(0, f, lab, props)
+            state.compute_prob(probabilities)
+            if state.prob > 0:
+                state.state_idx = idx
+                idx += 1
+                states.append(state)
+
+    transitions = []
+    prev_states = [init_state]
+
+    for i in range(num_frames):
+        cur_states = []
+        for s in states:
+            if s.frame_num == i:
+                cur_states.append(s)
+        for cs in cur_states:
+            for ps in prev_states:
+                transitions.append((ps.state_idx, cs.state_idx, cs.prob))
+        prev_states = cur_states.copy()
+    return states, transitions, prev_states
+    

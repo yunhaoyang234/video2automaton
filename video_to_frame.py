@@ -1,48 +1,3 @@
-!nvidia-smi
-
-
-import os
-HOME = os.getcwd()
-print("HOME:", HOME)
-
-!git clone https://github.com/IDEA-Research/GroundingDINO.git
-!git checkout -q 57535c5a79791cb76e36fdb64975271354f10251
-!pip install -q -e .
-
-import sys
-!{sys.executable} -m pip install 'git+https://github.com/facebookresearch/segment-anything.git'
-
-!pip uninstall -y supervision
-!pip install -q supervision==0.6.0
-
-import supervision as sv
-print(sv.__version__)
-
-!pip install -q roboflow
-
-import os
-
-GROUNDING_DINO_CONFIG_PATH = os.path.join(HOME, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
-print(GROUNDING_DINO_CONFIG_PATH, "; exist:", os.path.isfile(GROUNDING_DINO_CONFIG_PATH))
-
-!mkdir -p {HOME}/weights
-!wget -q https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth
-
-import os
-
-GROUNDING_DINO_CHECKPOINT_PATH = os.path.join(HOME, "weights", "groundingdino_swint_ogc.pth")
-print(GROUNDING_DINO_CHECKPOINT_PATH, "; exist:", os.path.isfile(GROUNDING_DINO_CHECKPOINT_PATH))
-
-!mkdir -p {HOME}/weights
-!wget -q https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
-
-import os
-
-SAM_CHECKPOINT_PATH = os.path.join(HOME, "weights", "sam_vit_h_4b8939.pth")
-print(SAM_CHECKPOINT_PATH, "; exist:", os.path.isfile(SAM_CHECKPOINT_PATH))
-
-"""## Load models"""
-
 import numpy as np
 import random
 from google.colab.patches import cv2_imshow
@@ -92,9 +47,21 @@ def detect(image, classes):
     )
     return detections
 
+def detect_objects(image, classes):
+    detection_list = []
+    # detect objects
+    for c in classes:
+        detections = grounding_dino_model.predict_with_classes(
+            image=image,
+            classes=enhance_class_name(class_names=[c]),
+            box_threshold=BOX_TRESHOLD,
+            text_threshold=TEXT_TRESHOLD
+        )
+        detection_list.append(detections)
+    return image, detection_list
+
 BOX_TRESHOLD = 0.4
 TEXT_TRESHOLD = 0.25
-CLASSES=[]
 
 """## Read Video"""
 
@@ -141,4 +108,31 @@ def annotate(image, detections, classes):
 
     annotated_frame = box_annotator.annotate(scene=image.copy(), detections=detections, labels=labels)
 
+    sv.plot_image(annotated_frame, (16, 16))
+
+def annotate_objects(image, detection_list, classes):
+    # annotate image with detections
+    box_annotator = sv.BoxAnnotator()
+
+    class_id, confidence, xyxy = [], [], []
+    idx = 0
+    for detections in detection_list:
+        for i in range(len(detections.class_id)):
+            if detections.class_id[i] != None and detections.class_id[i] == 0:
+                class_id.append(idx)
+                confidence.append(detections.confidence[i])
+                xyxy.append(detections.xyxy[i])
+        idx += 1
+
+    detections = detection_list[0]
+    detections.class_id = np.array(class_id)
+    detections.xyxy = np.array(xyxy)
+    detections.confidence = np.array(confidence)
+    labels = [
+        f"{classes[class_id]} {confidence:0.2f}"
+        for _, _, confidence, class_id, _
+        in detections]
+
+    annotated_frame = box_annotator.annotate(scene=image.copy(), detections=detections, labels=labels)
+    %matplotlib inline
     sv.plot_image(annotated_frame, (16, 16))
