@@ -8,11 +8,11 @@ We design a pipeline that uses recent advances in vision and language models, as
 Python version >= 3.7.0\
 For automaton construction, run\
 `python setup.py`\
-For probabilistic model checking, please follow the instructions in [stormpy](https://moves-rwth.github.io/stormpy/installation.html)\
+For probabilistic model checking, please follow the instructions in [stormpy](https://moves-rwth.github.io/stormpy/installation.html)
 
 ## Datasets
-- `HMDB: a large human motion database` [download](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) with privacy annotations [download](https://htwang14.github.io/PA-HMDB51-website/index.html)\
-- `nuImages` with object annotations [download](https://www.nuscenes.org/nuimages)\
+- `HMDB: a large human motion database` [download](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) with privacy annotations [download](https://htwang14.github.io/PA-HMDB51-website/index.html)
+- `nuImages` with object annotations [download](https://www.nuscenes.org/nuimages)
 - `Driving Control Dataset`
 
 ## Instructions
@@ -32,7 +32,7 @@ U - Until\
 [more rules](https://www.stormchecker.org/documentation/background/properties.html#propositional-expressions)
 
 ### Automaton Construction
-Download a video and keep the file path to the video `video_path`\
+Download a video and keep the file path to the video `video_path`
 ```bash
 $ python frame_to_automata.py \
          --propositions_seperate_by_comma "face,nude,female,male"\
@@ -41,10 +41,10 @@ $ python frame_to_automata.py \
       	 --video_path "video_path"\
 ```
 
-An illustration is presented in [Jupyter-Notebook](https://github.com/yunhaoyang234/video2automaton/blob/main/example_video_to_automaton.ipynb)\
+An illustration is presented in [Jupyter-Notebook](https://github.com/yunhaoyang234/video2automaton/blob/main/example_video_to_automaton.ipynb)
 
 ### Verification
-The probability of revealing gender in the video is less than 50 percent:\
+The probability of revealing gender in the video is less than 50 percent:
 ```bash
 $ python verification.py \
          --propositions_seperate_by_comma "face,nude,female,male"\
