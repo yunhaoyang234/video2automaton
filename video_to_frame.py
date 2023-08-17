@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from google.colab.patches import cv2_imshow
+import cv2
 
 import torch
 
@@ -65,8 +65,6 @@ TEXT_TRESHOLD = 0.25
 
 """## Read Video"""
 
-# import cv2
-# from google.colab.patches import cv2_imshow
 import numpy as np
 
 def read_video(path, scale=5, second_per_frame=2):
@@ -87,7 +85,7 @@ def read_video(path, scale=5, second_per_frame=2):
 
         if frame_counter % frame_per_sec == 0:
             res_frame = cv2.resize(frame, dsize=(int(width//scale), int(height//scale)), interpolation=cv2.INTER_CUBIC)
-            # cv2_imshow(res_frame) # show frame
+            # cv2.imshow(res_frame) # show frame
             video.append(res_frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'): # on press of q break
