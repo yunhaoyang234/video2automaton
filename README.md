@@ -10,6 +10,8 @@ For automaton construction, run\
 `python setup.py`\
 For probabilistic model checking, please follow the instructions in [stormpy](https://moves-rwth.github.io/stormpy/installation.html)
 
+For `pip install`, please visit [here](https://github.com/UTAustin-SwarmLab/Neuro-Symbolic-Video-Frame-Search)
+
 ## Datasets
 - `HMDB: a large human motion database` [download](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) with privacy annotations [download](https://htwang14.github.io/PA-HMDB51-website/index.html)
 - `nuImages` with object annotations [download](https://www.nuscenes.org/nuimages)
