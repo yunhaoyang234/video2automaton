@@ -16,7 +16,7 @@ parser.add_argument('--box_threshold', type=float, default=0.4)
 parser.add_argument('--scale', type=int, default=1)
 parser.add_argument('--second_per_frame', type=str, default=1)
 parser.add_argument('--video_path', type=str, default='')
-parser.add_argument('--LTLf_spec', type=str, default='') # example: "P=? [F face]"
+parser.add_argument('--LTLf_spec', type=str, default='') # example: "P=? [initial U (F face)]"
 
 def main(args):
     props = args.propositions_seperate_by_comma.split(',')
@@ -45,10 +45,12 @@ def build_trans_matrix(transitions, num_of_states):
 
 def build_label_func(states, props):
     state_labeling = stormpy.storage.StateLabeling(len(states))
+    state_labeling.add_label('initial')
     for label in props:
         state_labeling.add_label(label)
     for state in states:
-        state_labeling.add_label_to_state(state.label, state.state_idx)
+        for label in state.label_list:
+            state_labeling.add_label_to_state(label, state.state_idx)
     return state_labeling
 
 def model_checking(model, spec):
