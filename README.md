@@ -53,5 +53,5 @@ $ python verification.py \
          --scale 2\
       	 --second_per_frame 1\
       	 --video_path "video_path"\
-      	 --LTLf_spec "P>0.5 [ G  !male & !female]"\
+      	 --LTLf_spec "P>0.5 [ initial U (G  !male & !female) ]"\
 ```
