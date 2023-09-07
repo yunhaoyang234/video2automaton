@@ -5,12 +5,12 @@ We design a pipeline that uses recent advances in vision and language models, as
 ![pipeline](https://github.com/yunhaoyang234/video2automaton/blob/main/examples/pipeline.png)
 
 ## Setup
+### For the updated package installation, please visit [here](https://github.com/UTAustin-SwarmLab/Neuro-Symbolic-Video-Frame-Search)
+
 Python version >= 3.7.0\
 For automaton construction, run\
 `python setup.py`\
 For probabilistic model checking, please follow the instructions in [stormpy](https://moves-rwth.github.io/stormpy/installation.html)
-
-For `pip install`, please visit [here](https://github.com/UTAustin-SwarmLab/Neuro-Symbolic-Video-Frame-Search)
 
 ## Datasets
 - `HMDB: a large human motion database` [download](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/) with privacy annotations [download](https://htwang14.github.io/PA-HMDB51-website/index.html)
