@@ -5,7 +5,7 @@ We design a pipeline that uses recent advances in vision and language models, as
 ![pipeline](https://github.com/yunhaoyang234/video2automaton/blob/main/examples/pipeline.png)
 
 ## Setup
-### For the updated package installation, please visit [here](https://github.com/UTAustin-SwarmLab/Neuro-Symbolic-Video-Frame-Search)
+#### For the updated package installation, please visit [here](https://github.com/UTAustin-SwarmLab/Neuro-Symbolic-Video-Frame-Search)
 
 Python version >= 3.7.0\
 For automaton construction, run\
@@ -53,5 +53,5 @@ $ python verification.py \
          --scale 2\
       	 --second_per_frame 1\
       	 --video_path "video_path"\
-      	 --LTLf_spec "P>0.5 [ initial U (G  !male & !female) ]"\
+      	 --LTLf_spec "P>0.5 [ G  ! \"male\" & ! \"female\" ]"\
 ```
