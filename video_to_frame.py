@@ -63,7 +63,7 @@ def detect_objects(image, classes):
 BOX_TRESHOLD = 0.4
 TEXT_TRESHOLD = 0.25
 
-"""## Read Video"""
+"""Read Video"""
 
 import numpy as np
 
