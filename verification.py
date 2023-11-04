@@ -100,4 +100,6 @@ def build_label_func(states: list[State], props: list[str]) -> stormpy.storage.S
                 state_labeling.add_label_to_state(label, state.state_index)
 
     return state_labeling
-
+    
+if __name__ == "__main__":
+    parser.parse_args()
