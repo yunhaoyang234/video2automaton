@@ -101,5 +101,5 @@ def build_label_func(states: list[State], props: list[str]) -> stormpy.storage.S
 
     return state_labeling
     
-if __name__ == "__main__":
-    parser.parse_args()
+if __name__ == '__main__':
+    main(parser.parse_args())
