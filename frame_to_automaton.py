@@ -62,3 +62,6 @@ def frame2automaton(video_path, props, scale=2, second_per_frame=2):
     probabilities = get_probabilities(props, video)
     states, transitions, accept_states = build_automaton(props, num_frames, probabilities)
     return states, transitions, accept_states
+
+if __name__ == "__main__":
+    parser.parse_args()
