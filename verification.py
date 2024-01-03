@@ -31,7 +31,7 @@ def main(args):
     markovian_states = stormpy.BitVector(len(states), list(range(len(states))))
     components = stormpy.SparseModelComponents(transition_matrix=transition_matrix, state_labeling=state_labeling,
                                                markovian_states=markovian_states)
-    components.exit_rates = [0.0 for i in range(len(states))]
+    components.exit_rates = [0.0]*(len(states)-len(accept_states)) + [1.0]*len(accept_states)
     ma = stormpy.storage.SparseMA(components)
     print(ma)
     print(model_checking(ma, spec))
