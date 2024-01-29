@@ -6,6 +6,7 @@ from stormpy.storage import Expression
 
 from video_to_frame import *
 from automaton_state import *
+from frame_to_automaton import *
 import argparse
 import pprint
 import json
@@ -23,7 +24,7 @@ def main(args):
     BOX_TRESHOLD = args.box_threshold
     scale=args.scale
     second_per_frame=args.second_per_frame
-    states, transitions, accept_states = frame2automaton(args.video_path, props, scale, second_per_frame)
+    states, transitions = frame2automaton(args.video_path, props, scale, second_per_frame)
     
     spec = args.LTLf_spec
     transition_matrix = build_trans_matrix(transitions, len(states))
@@ -31,7 +32,7 @@ def main(args):
     markovian_states = stormpy.BitVector(len(states), list(range(len(states))))
     components = stormpy.SparseModelComponents(transition_matrix=transition_matrix, state_labeling=state_labeling,
                                                markovian_states=markovian_states)
-    components.exit_rates = [0.0]*(len(states)-len(accept_states)) + [1.0]*len(accept_states)
+    components.exit_rates = [1.0]*len(states)
     ma = stormpy.storage.SparseMA(components)
     print(ma)
     print(model_checking(ma, spec))
@@ -92,12 +93,8 @@ def build_label_func(states: list[State], props: list[str]) -> stormpy.storage.S
         state_labeling.add_label(label)
 
     for state in states:
-        if state.state_index == 0:
-            state_labeling.add_label("init")
-            state_labeling.add_label_to_state("init", state.state_index)
-        else:
-            for label in state.current_descriptive_label:
-                state_labeling.add_label_to_state(label, state.state_index)
+        for label in state.label_list:
+            state_labeling.add_label_to_state(label, state.state_index)
 
     return state_labeling
     

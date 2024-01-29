@@ -19,6 +19,8 @@ class State:
         return self.__repr__()+' '+str(self.frame_num)+' '+ str(self.prob)
 
     def build_labels(self, label, props):
+        if label == 'initial' or label == 'final':
+            return [label]
         labels = []
         for i in range(len(props)):
             if label[i] == 'T':
@@ -75,5 +77,12 @@ def build_automaton(props, num_frames, probabilities):
             for ps in prev_states:
                 transitions.append((ps.state_idx, cs.state_idx, cs.prob))
         prev_states = cur_states.copy()
-    return states, transitions, prev_states
+
+    final_state = State(idx, num_frames, 'final', props)
+    states.append(final_state)
+    for ps in prev_states:
+        transitions.append((ps.state_idx, idx, 1))
+    transitions.append((idx,idx,1))
+
+    return states, transitions
     
